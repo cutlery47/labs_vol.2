@@ -5,7 +5,7 @@ using namespace std;
 
 struct list_el {
     int data;
-    list_el *addr;
+    list_el *addr;    
 };
 
 void setcur(int x, int y) {
@@ -71,7 +71,7 @@ void print_list(list_el* head, short mode) {
         } else if (mode == 2) {
             cout << iterator -> data;
             if (iterator -> addr != NULL) {
-                cout << " - ";
+                cout << " -> ";
             }
         }
         iterator = iterator -> addr;
@@ -226,25 +226,17 @@ list_el* delete_some(list_el* head, int index, int amount) {
     }
 }
 
-list_el* reverse(list_el* head, int list_size) {
-    list_el* iterator = head;
-    int reversed_values[list_size];
-    int i = 1;
-    
-    while (iterator != NULL) {
-        reversed_values[list_size - i] = iterator -> data;
-        iterator = iterator -> addr;
-        ++i;
+list_el* reverse(list_el* head)
+{
+    list_el *prev = NULL, *curr = head, *next;
+  
+    while (curr) {
+        next = curr->addr;
+        curr->addr = prev;
+        prev = curr;
+        curr = next;
     }
-
-    iterator = head;
-    i = 0;
-
-    while (iterator != NULL) {
-        iterator -> data = reversed_values[i];
-        ++i;
-        iterator = iterator -> addr;
-    }
+    head = prev;
 
     return head;
 }
@@ -405,18 +397,15 @@ int get_value(int value, short &option, int max) {
 }
 
 int main() {
-    //wind-1251 encoding - on
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    //hiding the cursor
-    hide_cursor();
 
-    //initializing variables
     short option = 1, quit = 0, flag_1 = 0;
     int list_size = 0;
     list_el* head = 0;
 
     while (quit == 0) {
+        hide_cursor();
         setcur(0, 0);
         menu(option, head);
         option = get_option(option);
@@ -608,7 +597,7 @@ int main() {
                 continue;
             }
 
-            head = reverse(head, list_size);
+            head = reverse(head);
             option = 7;
         } else if (option == -8) {
             warning(list_size, option);
