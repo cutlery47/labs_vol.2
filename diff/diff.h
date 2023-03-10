@@ -118,7 +118,7 @@ char* FileToString(char* file_name, char* string) {
 
 int** LCS_Matrix(const char* string_1, const char* string_2, int height, int width) {
     // the matrix consists of amounts of elements, which are common
-    // in both the firstand the second string
+    // in both the first and the second string
 
     int** LCS_Matrix = new int*[height + 1];    //
                                                 // initializing an array dynamically
@@ -151,7 +151,7 @@ int** LCS_Matrix(const char* string_1, const char* string_2, int height, int wid
 
 char* LCS_String(const char* string_1, const char* string_2, int** matrix, int size, int i, int j) {
     int cnt = 1;
-    char* reversed_string = new char[size + 1];
+    char* reversed_string = new char[size];
 
     for (int i = 0; i < size + 1; ++i) {
         reversed_string[i] = 0;
@@ -180,34 +180,30 @@ void HighlightedPrint(char* common, const char* string, int string_size, int com
     int i = 0, j = 0;
     SetCursor(pos, line);
 
-    while (i < string_size && j < common_size) {
+    while ((i < string_size) && (j < common_size)) {
         if (string[i] == '\n') {
+            if (common[j] == '\n') {
+                ++j;
+            }
             line += 1;
             SetCursor(pos, line);
-            ++i;
         } else {
             if (common[j] == string[i]) {
-            color(10);
-            cout << string[i];
-            color(7);
-            ++i;
-            ++j;
-            } else {
-                color(12);
-                cout << string[i];
+                color(10);
+                cout << common[j];
                 color(7);
-                ++i;
-            }
-        }   
-    }
-
-    while (i < string_size) {
-        color(12);
-        cout << string[i];
-        color(7);
+                ++j;
+                } else {
+                    color(12);
+                    cout << string[i];
+                    color(7);
+                }
+        }
         ++i;
     }
+    
 }
+
 
 void MainMenu(char* file_name_1, char* file_name_2, char* string_1, char* string_2, char* common, int string_1_size, int string_2_size, int common_size) { // main menu interface
     int current_line = 0;
