@@ -9,7 +9,7 @@ int main(int argc, char* argv[]) {
     system("cls");
     SetConsoleCP(1251);
     SetConsoleOutputCP(1251);
-    HideCursor();
+    // HideCursor();
 
     char el;
     int cntr = 0;

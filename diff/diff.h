@@ -2,7 +2,7 @@ using namespace std;
 
 // int terminal_width = 211;
 // int terminal_height = 57;
-int terminal_width = 122;
+int terminal_width = 121;
 int terminal_height = 30;
 fstream file;
 const char* separator_line = "========================================================================================================================";
@@ -172,35 +172,53 @@ char* LCS_String(const char* string_1, const char* string_2, int** matrix, int s
         }
     }
 
+    // reversed_string = ReverseString(reversed_string);
     return reversed_string;
 }
 
-void HighlightedPrint(char* common, const char* string, int string_size, int common_size, int pos, int line) {
+void HighlightedPrint(char* common, const char* string, int string_size, int common_size, int line, int begin, int end) {
     int i = 0, j = 0;
-    SetCursor(pos, line);
+    int cntr = 0;
+    SetCursor(begin, line);
 
     while ((i < string_size) && (j < common_size)) {
-        if (string[i] == '\n') {
+        if (string[i] == '\n' || (begin + cntr >= end)) {
             if (common[j] == '\n') {
                 ++j;
             }
+            cntr = 0;
             line += 1;
-            SetCursor(pos, line);
+            SetCursor(begin, line);
         } else {
             if (common[j] == string[i]) {
                 color(10);
                 cout << common[j];
                 color(7);
                 ++j;
-                } else {
-                    color(12);
-                    cout << string[i];
-                    color(7);
-                }
+            } else {
+                color(12);
+                cout << string[i];
+                color(7);
+            }
+            ++cntr;
         }
+        ++i;    
+    }
+
+    while (i < string_size) {
+        SetCursor(begin + cntr, line);
+        if (begin + cntr >= end) {
+            cntr = 1;
+            ++line;
+            SetCursor(begin, line);
+        } else {
+            ++cntr;
+        }
+        color(12);
+        cout << string[i];
+        color(7);
         ++i;
     }
-    
 }
 
 
@@ -220,9 +238,9 @@ void MainMenu(char* file_name_1, char* file_name_2, char* string_1, char* string
                 PrintCenteredText(file_name_1, current_line, -2);
                 PrintCenteredText(file_name_2, current_line, 2);
             } else if (current_line == 6) {
-                HighlightedPrint(common, string_1, string_1_size, common_size, 0, current_line);
+                HighlightedPrint(common, string_1, string_1_size, common_size, current_line, 0, 60);
                 SetCursor(terminal_width/2, current_line);
-                HighlightedPrint(common, string_2, string_2_size, common_size, terminal_width/2 + 2, current_line);
+                HighlightedPrint(common, string_2, string_2_size, common_size, current_line, terminal_width / 2 + 3, terminal_width - 1);
             }
             PrintCenteredText("|||", current_line, 1);
             
