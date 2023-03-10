@@ -172,7 +172,6 @@ char* LCS_String(const char* string_1, const char* string_2, int** matrix, int s
         }
     }
 
-    // reversed_string = ReverseString(reversed_string);
     return reversed_string;
 }
 

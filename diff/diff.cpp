@@ -28,20 +28,9 @@ int main(int argc, char* argv[]) {
     int **matrix = LCS_Matrix(string_1, string_2, length_1, length_2);
     int result_len = matrix[length_1][length_2];
     char* result = LCS_String(string_1, string_2, matrix, result_len, length_1, length_2);
-    // cout << result; 
-    // getch()
 
     MainMenu(argv[1], argv[2], string_1, string_2, result, length_1, length_2, result_len);
-    // for (int i = 0; i < length_1; ++i) {
-    //     for (int j = 0; j < length_2; ++j) {
-    //         cout << matrix[i][j] << " ";
-    //     }
-    //     cout << "\n";
-    // }
-
-    // cout << result;
-
-    // getch();
+   
     system("cls");
     return 0;
 }
