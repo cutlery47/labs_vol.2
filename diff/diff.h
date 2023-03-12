@@ -60,12 +60,70 @@ void Confirm(int y) {
     }
 }
 
-int InputCheck (int argc, char** argv) {
+int EndingCheck(char* file_name, int size) {
+    if (file_name[size - 1] == 't' && file_name[size - 2] == 'x'
+    && file_name[size - 3] == 't' && file_name[size - 4] == '.') {
+        return 0;
+    } else {
+        return 1;
+    }
+}
+
+int FormatCheck(char* file_name_1, char* file_name_2, int size_1, int size_2) {
+    int first_check = EndingCheck(file_name_1, size_1);
+    int second_check = EndingCheck(file_name_2, size_2);
+
+    if (first_check == 1 && second_check == 1) {
+        PrintCenteredText("Неверные типы файлов...", 0, 1);
+        Confirm(1);
+        return 1;
+    } else if (first_check == 1) {
+        PrintCenteredText("Неверный тип первого файла...", 0, 1);
+        Confirm(1);
+        return 1;
+    } else if (second_check == 1) {
+        PrintCenteredText("Неверный тип второго файла...", 0, 1);
+        Confirm(1);
+        return 1;
+    }
+
+}
+
+int FileCheck(char* file_name) {
+    file.open(file_name);
+    if (file.is_open()) {
+        file.close();
+        return 0;
+    } else {
+        file.close();
+        return 1;
+    }
+}
+
+int InputCheck(int argc, char** argv) {
+    int opened_1 = FileCheck(argv[1]);
+    int opened_2 = FileCheck(argv[2]);
+
     if (argc < 3) {
         PrintCenteredText("Недостаточное число аргументов...", 0, 1);
         Confirm(1);
         return 1;
+    } if (opened_1 == 1 && opened_2 == 1) {
+        PrintCenteredText("Таких файлов не существует...", 0, 1);
+        Confirm(1);
+        return 1;
+    } else if (opened_1 == 1) {
+        PrintCenteredText("Первого файла не существует...", 0, 1);
+        Confirm(1);
+        return 1;
+    } else if (opened_2 == 1) {
+        PrintCenteredText("Второго файла не существует...", 0, 1);
+        Confirm(1);
+        return 1;
+    } else {
+        return 0;
     }
+    
 }
 
 void color(int x) {
@@ -107,6 +165,20 @@ int GetFileLen(char* file_name, int len) {
     file.close();
 
     return len;
+}
+
+int GetFileHeight(char* file_name, int height) {
+    char el;
+    file.open(file_name, fstream::in);
+
+    while (file.get(el)) {
+        if (el == '\n') {
+            ++height;
+        }
+    }
+
+    file.close();
+    return height;
 }
 
 char* FileToString(char* file_name, char* string) {
@@ -229,8 +301,16 @@ void HighlightedPrint(char* common, const char* string, int string_size, int com
     }
 }
 
-void MainMenu(char* file_name_1, char* file_name_2, char* string_1, char* string_2, char* common, int string_1_size, int string_2_size, int common_size) { // main menu interface
+void MainMenu(char* file_name_1, char* file_name_2, char* string_1, char* string_2, char* common, int string_1_size, int string_2_size, int common_size, int height_1, int height_2) { // main menu interface
     int current_line = 0;
+    
+    if (height_1 > height_2) {
+        terminal_height = height_1 + 20;
+    } else {
+        terminal_height = height_2 + 20;
+    }
+
+    
     while (current_line < terminal_height) {
 
         if (current_line == 0 || current_line == 2 || current_line == 5 || current_line == terminal_height - 2) {
